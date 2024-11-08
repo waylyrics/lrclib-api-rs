@@ -2,6 +2,9 @@
 name = "lrclib-api-rs"
 version = "0.1.0"
 edition = "2021"
+authors = ["mokurin000"]
+description = "LRCLib API Wrapper."
+license = "MIT"
 
 [dependencies]
 http = "1.1.0"
