@@ -6,10 +6,11 @@ use thiserror::Error;
 #[serde(rename_all = "camelCase")]
 pub struct LyricsData {
     pub id: u64,
+    pub name: String,
     pub track_name: String,
     pub artist_name: String,
     pub album_name: Option<String>,
-    pub duration: Option<u64>,
+    pub duration: Option<f64>,
     pub instrumental: bool,
     pub plain_lyrics: String,
     pub synced_lyrics: String,
