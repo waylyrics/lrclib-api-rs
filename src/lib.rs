@@ -6,11 +6,53 @@ mod types;
 pub use types::*;
 
 const BASE_URL: &str = "https://lrclib.net";
+const DEFAULT_USER_AGENT: &str = concat!("LRCAPIWrapper/", env!("CARGO_PKG_VERSION"));
 
-pub struct LRCLibAPI;
+#[derive(Clone, Debug)]
+pub struct LRCLibAPI {
+    base_url: String,
+    user_agent: String,
+}
+
+impl Default for LRCLibAPI {
+    fn default() -> Self {
+        Self {
+            base_url: BASE_URL.into(),
+            user_agent: DEFAULT_USER_AGENT.into(),
+        }
+    }
+}
+
+impl LRCLibAPI {
+    pub fn new() -> Self {
+        Default::default()
+    }
+
+    pub fn with_base_url(base_url: String) -> Self {
+        Self {
+            base_url,
+            ..Default::default()
+        }
+    }
+
+    pub fn with_user_agent(user_agent: String) -> Self {
+        Self {
+            user_agent,
+            ..Default::default()
+        }
+    }
+
+    pub fn with_parts(base_url: String, user_agent: String) -> Self {
+        Self {
+            base_url,
+            user_agent,
+        }
+    }
+}
 
 impl LRCLibAPI {
     pub fn get_lyrics_request(
+        &self,
         track_name: &str,
         artist_name: &str,
         album_name: Option<&str>,
@@ -35,28 +77,29 @@ impl LRCLibAPI {
             .collect::<Vec<String>>()
             .join("&");
 
-        let uri = format!("{}/api/get?{}", BASE_URL, query_string);
+        let uri = format!("{}/api/get?{}", &self.base_url, query_string);
 
         Request::builder()
             .method(Method::GET)
             .uri(uri)
-            .header("User-Agent", "LRCAPIWrapper/0.1.0")
+            .header("User-Agent", &self.user_agent)
             .body(())
             .map_err(ApiError::from)
     }
 
-    pub fn get_lyrics_by_id_request(id: u64) -> Result<Request<()>, ApiError> {
-        let uri = format!("{}/api/get/{}", BASE_URL, id);
+    pub fn get_lyrics_by_id_request(&self, id: u64) -> Result<Request<()>, ApiError> {
+        let uri = format!("{}/api/get/{}", &self.base_url, id);
 
         Request::builder()
             .method(Method::GET)
             .uri(uri)
-            .header("User-Agent", "LRCAPIWrapper/0.1.0")
+            .header("User-Agent", &self.user_agent)
             .body(())
             .map_err(ApiError::from)
     }
 
     pub fn search_lyrics_request(
+        &self,
         query: Option<&str>,
         track_name: Option<&str>,
         artist_name: Option<&str>,
@@ -83,32 +126,33 @@ impl LRCLibAPI {
             .collect::<Vec<String>>()
             .join("&");
 
-        let uri = format!("{}/api/search?{}", BASE_URL, query_string);
+        let uri = format!("{}/api/search?{}", &self.base_url, query_string);
 
         Request::builder()
             .method(Method::GET)
             .uri(uri)
-            .header("User-Agent", "LRCAPIWrapper/0.1.0")
+            .header("User-Agent", &self.user_agent)
             .body(())
             .map_err(ApiError::from)
     }
 
-    pub fn request_publish_challenge_request() -> Result<Request<()>, ApiError> {
-        let uri = format!("{}/api/request-challenge", BASE_URL);
+    pub fn request_publish_challenge_request(&self) -> Result<Request<()>, ApiError> {
+        let uri = format!("{}/api/request-challenge", &self.base_url);
 
         Request::builder()
             .method(Method::POST)
             .uri(uri)
-            .header("User-Agent", "LRCAPIWrapper/0.1.0")
+            .header("User-Agent", &self.user_agent)
             .body(())
             .map_err(ApiError::from)
     }
 
     pub fn publish_lyrics_request(
+        &self,
         lyrics: &LyricsData,
         publish_token: &str,
     ) -> Result<Request<String>, ApiError> {
-        let uri = format!("{}/api/publish", BASE_URL);
+        let uri = format!("{}/api/publish", &self.base_url);
         if lyrics.album_name.is_none() || lyrics.duration.is_none() {
             Err(ApiError::MissingFieldExists)?
         }
@@ -118,7 +162,7 @@ impl LRCLibAPI {
         Request::builder()
             .method(Method::POST)
             .uri(uri)
-            .header("User-Agent", "LRCAPIWrapper/0.1.0")
+            .header("User-Agent", &self.user_agent)
             .header("X-Publish-Token", publish_token)
             .header("Content-Type", "application/json")
             .body(body)

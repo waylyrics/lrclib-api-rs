@@ -6,7 +6,8 @@ type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
 
 #[test]
 fn publish_lyric() -> Result<()> {
-    let req = LRCLibAPI::publish_lyrics_request(
+    let api = LRCLibAPI::new();
+    let req = api.publish_lyrics_request(
         &LyricsData {
             id: 0,
             name: "你好".into(),
@@ -32,7 +33,8 @@ fn publish_lyric() -> Result<()> {
 
 #[test]
 fn publish_lyric_field_missing() -> Result<()> {
-    let req = LRCLibAPI::publish_lyrics_request(
+    let api = LRCLibAPI::new();
+    let req = api.publish_lyrics_request(
         &LyricsData {
             id: 0,
             name: "你好".into(),
@@ -54,7 +56,8 @@ fn publish_lyric_field_missing() -> Result<()> {
 
 #[test]
 fn publish_lyric_field_missing_2() -> Result<()> {
-    let req = LRCLibAPI::publish_lyrics_request(
+    let api = LRCLibAPI::new();
+    let req = api.publish_lyrics_request(
         &LyricsData {
             id: 0,
             name: "你好".into(),
