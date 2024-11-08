@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use strum::EnumIs;
 use thiserror::Error;
 
 // Define response structs based on API sample responses.
@@ -19,13 +20,13 @@ pub struct LyricsData {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ErrorResponse {
-    pub code: u32,
+    pub status_code: u32,
     pub name: String,
     pub message: String,
 }
 
 // Enum for wrapping successful and error responses for the /api/get endpoint.
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, EnumIs)]
 #[serde(untagged)]
 pub enum GetLyricsResponse {
     Success(LyricsData),
@@ -33,7 +34,7 @@ pub enum GetLyricsResponse {
 }
 
 // Enum for wrapping success and error responses for the /api/publish endpoint.
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, EnumIs)]
 #[serde(untagged)]
 pub enum PublishResponse {
     Created,              // Represents a successful publish (201 Created).
