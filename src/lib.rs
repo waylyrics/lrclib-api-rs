@@ -51,7 +51,7 @@ impl LRCLibAPI {
 }
 
 impl LRCLibAPI {
-    pub fn get_lyrics_request(
+    pub fn get_lyrics(
         &self,
         track_name: &str,
         artist_name: &str,
@@ -87,7 +87,7 @@ impl LRCLibAPI {
             .map_err(ApiError::from)
     }
 
-    pub fn get_lyrics_by_id_request(&self, id: u64) -> Result<Request<()>, ApiError> {
+    pub fn get_lyrics_by_id(&self, id: u64) -> Result<Request<()>, ApiError> {
         let uri = format!("{}/api/get/{}", &self.base_url, id);
 
         Request::builder()
@@ -98,7 +98,7 @@ impl LRCLibAPI {
             .map_err(ApiError::from)
     }
 
-    pub fn search_lyrics_request(
+    pub fn search_lyrics(
         &self,
         query: Option<&str>,
         track_name: Option<&str>,
@@ -136,7 +136,7 @@ impl LRCLibAPI {
             .map_err(ApiError::from)
     }
 
-    pub fn request_publish_challenge_request(&self) -> Result<Request<()>, ApiError> {
+    pub fn request_publish_challenge(&self) -> Result<Request<()>, ApiError> {
         let uri = format!("{}/api/request-challenge", &self.base_url);
 
         Request::builder()
@@ -147,7 +147,7 @@ impl LRCLibAPI {
             .map_err(ApiError::from)
     }
 
-    pub fn publish_lyrics_request(
+    pub fn publish_lyrics(
         &self,
         lyrics: &LyricsData,
         publish_token: &str,

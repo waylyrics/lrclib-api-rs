@@ -7,7 +7,7 @@ type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
 #[test]
 fn query_by_id() -> Result<()> {
     let api = LRCLibAPI::new();
-    let req = api.get_lyrics_by_id_request(1)?;
+    let req = api.get_lyrics_by_id(1)?;
     let url = req.uri().to_string();
 
     let resp = reqwest::blocking::get(url)?.text()?;
@@ -20,7 +20,7 @@ fn query_by_id() -> Result<()> {
 #[test]
 fn query_by_id_error() -> Result<()> {
     let api = LRCLibAPI::new();
-    let req = api.get_lyrics_by_id_request(0)?;
+    let req = api.get_lyrics_by_id(0)?;
     let url = req.uri().to_string();
 
     let resp = reqwest::blocking::get(url)?.text()?;
