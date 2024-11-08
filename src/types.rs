@@ -3,7 +3,7 @@ use strum::EnumIs;
 use thiserror::Error;
 
 // Define response structs based on API sample responses.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct LyricsData {
     pub id: u64,
@@ -49,10 +49,12 @@ pub struct PublishChallenge {
 }
 
 // Custom error type using thiserror crate
-#[derive(Error, Debug)]
+#[derive(Error, Debug, EnumIs)]
 pub enum ApiError {
     #[error("http request error: {0}")]
     HttpRequestError(#[from] http::Error),
     #[error("JSON serialization error: {0}")]
     JsonSerializationError(#[from] serde_json::Error),
+    #[error("fields are required to be filled to publish")]
+    MissingFieldExists,
 }

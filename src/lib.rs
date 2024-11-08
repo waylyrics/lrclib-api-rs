@@ -109,6 +109,9 @@ impl LRCLibAPI {
         publish_token: &str,
     ) -> Result<Request<String>, ApiError> {
         let uri = format!("{}/api/publish", BASE_URL);
+        if lyrics.album_name.is_none() || lyrics.duration.is_none() {
+            Err(ApiError::MissingFieldExists)?
+        }
 
         let body = serde_json::to_string(lyrics)?;
 
