@@ -11,6 +11,7 @@ pub struct LyricsData {
     pub artist_name: String,
     pub instrumental: bool,
     pub album_name: Option<String>,
+    /// duration in seconds
     pub duration: Option<f64>,
     pub plain_lyrics: Option<String>,
     pub synced_lyrics: Option<String>,
@@ -25,6 +26,7 @@ pub struct LyricsPublishData {
     pub artist_name: String,
     pub instrumental: bool,
     pub album_name: String,
+    /// duration in seconds
     pub duration: f64,
     pub plain_lyrics: String,
     pub synced_lyrics: String,
