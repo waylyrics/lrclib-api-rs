@@ -4,6 +4,7 @@ use http::{Method, Request};
 
 mod types;
 pub use types::*;
+use url::Url;
 
 type Result<T> = std::result::Result<T, ApiError>;
 
@@ -80,6 +81,8 @@ impl LRCLibAPI {
             .join("&");
 
         let uri = format!("{}/api/get?{}", &self.base_url, query_string);
+        let uri = Url::parse(&uri)?;
+        let uri = uri.as_str();
 
         Request::builder()
             .method(Method::GET)
@@ -91,6 +94,8 @@ impl LRCLibAPI {
 
     pub fn get_lyrics_by_id(&self, id: u64) -> Result<Request<()>> {
         let uri = format!("{}/api/get/{}", &self.base_url, id);
+        let uri = Url::parse(&uri)?;
+        let uri = uri.as_str();
 
         Request::builder()
             .method(Method::GET)
@@ -104,6 +109,8 @@ impl LRCLibAPI {
         let query_string = format!("q={query}");
 
         let uri = format!("{}/api/search?{}", &self.base_url, query_string);
+        let uri = Url::parse(&uri)?;
+        let uri = uri.as_str();
 
         Request::builder()
             .method(Method::GET)
@@ -136,6 +143,8 @@ impl LRCLibAPI {
             .join("&");
 
         let uri = format!("{}/api/search?{}", &self.base_url, query_string);
+        let uri = Url::parse(&uri)?;
+        let uri = uri.as_str();
 
         Request::builder()
             .method(Method::GET)
@@ -167,6 +176,8 @@ impl LRCLibAPI {
 
     pub fn request_publish_challenge(&self) -> Result<Request<()>> {
         let uri = format!("{}/api/request-challenge", &self.base_url);
+        let uri = Url::parse(&uri)?;
+        let uri = uri.as_str();
 
         Request::builder()
             .method(Method::POST)
@@ -182,7 +193,14 @@ impl LRCLibAPI {
         publish_token: &str,
     ) -> Result<Request<String>> {
         let uri = format!("{}/api/publish", &self.base_url);
-        if lyrics.album_name.is_none() || lyrics.duration.is_none() {
+        let uri = Url::parse(&uri)?;
+        let uri = uri.as_str();
+
+        if lyrics.album_name.is_none()
+            || lyrics.duration.is_none()
+            || lyrics.plain_lyrics.is_none()
+            || lyrics.synced_lyrics.is_none()
+        {
             Err(ApiError::MissingFieldExists)?
         }
 

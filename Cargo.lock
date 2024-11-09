@@ -591,6 +591,7 @@ dependencies = [
  "serde_json",
  "strum",
  "thiserror",
+ "url",
 ]
 
 [[package]]

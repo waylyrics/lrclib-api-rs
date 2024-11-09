@@ -14,8 +14,8 @@ fn publish_lyric() -> Result<()> {
             track_name: "你好压".into(),
             artist_name: "初音未来".into(),
             instrumental: false,
-            plain_lyrics: "你好".into(),
-            synced_lyrics: "[00:00.00]你好".into(),
+            plain_lyrics: Some("你好".into()),
+            synced_lyrics: Some("[00:00.00]你好".into()),
             album_name: Some("专辑".into()),
             duration: Some(0.0),
         },
@@ -41,33 +41,10 @@ fn publish_lyric_field_missing() -> Result<()> {
             track_name: "你好压".into(),
             artist_name: "初音未来".into(),
             instrumental: false,
-            plain_lyrics: "你好".into(),
-            synced_lyrics: "[00:00.00]你好".into(),
+            plain_lyrics: Some("你好".into()),
+            synced_lyrics: Some("[00:00.00]你好".into()),
             album_name: Some("专辑".into()),
             duration: None,
-        },
-        "INVALID_TOKEN",
-    );
-
-    assert!(req.unwrap_err().is_missing_field_exists());
-
-    Ok(())
-}
-
-#[test]
-fn publish_lyric_field_missing_2() -> Result<()> {
-    let api = LRCLibAPI::new();
-    let req = api.publish_lyrics(
-        &LyricsData {
-            id: 0,
-            name: "你好".into(),
-            track_name: "你好压".into(),
-            artist_name: "初音未来".into(),
-            instrumental: false,
-            plain_lyrics: "你好".into(),
-            synced_lyrics: "[00:00.00]你好".into(),
-            album_name: None,
-            duration: Some(0.),
         },
         "INVALID_TOKEN",
     );

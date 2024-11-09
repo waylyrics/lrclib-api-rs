@@ -10,11 +10,11 @@ pub struct LyricsData {
     pub name: String,
     pub track_name: String,
     pub artist_name: String,
+    pub instrumental: bool,
     pub album_name: Option<String>,
     pub duration: Option<f64>,
-    pub instrumental: bool,
-    pub plain_lyrics: String,
-    pub synced_lyrics: String,
+    pub plain_lyrics: Option<String>,
+    pub synced_lyrics: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -51,6 +51,8 @@ pub struct PublishChallenge {
 // Custom error type using thiserror crate
 #[derive(Error, Debug, EnumIs)]
 pub enum ApiError {
+    #[error("Url parse error: {0}")]
+    UrlError(#[from] url::ParseError),
     #[error("http request error: {0}")]
     HttpRequestError(#[from] http::Error),
     #[error("JSON serialization error: {0}")]
