@@ -16,3 +16,17 @@ fn search_keyword() -> Result<()> {
 
     Ok(())
 }
+
+#[test]
+fn search_detailed() -> Result<()> {
+    let api = LRCLibAPI::new();
+    let req =
+        api.search_lyrics_detailed("原神", Some("ChiliChill"), Some("Let the Wind Tell You"))?;
+    let url = req.uri().to_string();
+
+    let resp = reqwest::blocking::get(url)?.text()?;
+    println!("{resp}");
+    let _: Vec<LyricsData> = serde_json::from_str(&resp)?;
+
+    Ok(())
+}
