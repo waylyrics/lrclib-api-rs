@@ -12,11 +12,8 @@ fn publish_lyric() -> Result<()> {
     let api = LRCLibAPI::new();
     let req = api.publish_lyrics(
         &LyricsPublishData {
-            id: 0,
-            name: "你好".into(),
             track_name: "你好压".into(),
             artist_name: "初音未来".into(),
-            instrumental: false,
             plain_lyrics: "你好".into(),
             synced_lyrics: "[00:00.00]你好".into(),
             album_name: "专辑".into(),

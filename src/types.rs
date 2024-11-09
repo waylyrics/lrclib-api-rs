@@ -5,28 +5,33 @@ use strum::EnumIs;
 #[derive(Debug, Deserialize, Serialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct LyricsData {
+    /// lyrics id in LRCLib database
     pub id: u64,
+    /// maybe deprecated fallback of track_name
     pub name: String,
+    /// Title of the track
     pub track_name: String,
+    /// Track's artist name
     pub artist_name: String,
-    pub instrumental: bool,
+    /// Track's album name
     pub album_name: Option<String>,
     /// duration in seconds
     pub duration: Option<f64>,
+    /// instrumental means both plain_lyrics and synced_lyrics are empty.
+    pub instrumental: bool,
+    /// plain lyrics without timestamp
     pub plain_lyrics: Option<String>,
+    /// synced lyrics as standard LRC
     pub synced_lyrics: Option<String>,
 }
 
+/// check comments on LyricsData.
 #[derive(Debug, Deserialize, Serialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct LyricsPublishData {
-    pub id: u64,
-    pub name: String,
     pub track_name: String,
     pub artist_name: String,
-    pub instrumental: bool,
     pub album_name: String,
-    /// duration in seconds
     pub duration: f64,
     pub plain_lyrics: String,
     pub synced_lyrics: String,
