@@ -1,6 +1,5 @@
 use serde::{Deserialize, Serialize};
 use strum::EnumIs;
-use thiserror::Error;
 
 // Define response structs based on API sample responses.
 #[derive(Debug, Deserialize, Serialize, Default)]
@@ -60,16 +59,4 @@ pub enum PublishResponse {
 pub struct PublishChallenge {
     pub prefix: String,
     pub target: String,
-}
-
-// Custom error type using thiserror crate
-#[derive(Error, Debug, EnumIs)]
-#[non_exhaustive]
-pub enum ApiError {
-    #[error("Url parse error: {0}")]
-    UrlError(#[from] url::ParseError),
-    #[error("http request error: {0}")]
-    HttpRequestError(#[from] http::Error),
-    #[error("JSON serialization error: {0}")]
-    JsonSerializationError(#[from] serde_json::Error),
 }

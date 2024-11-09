@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use lrclib_api_rs::{GetLyricsResponse, LRCLibAPI};
+use lrclib_api_rs::{types::GetLyricsResponse, LRCLibAPI};
 
 type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
 

@@ -1,12 +1,14 @@
 use std::borrow::Cow;
 
 use http::{Method, Request};
-
-mod types;
-pub use types::*;
 use url::Url;
 
-type Result<T> = std::result::Result<T, ApiError>;
+pub mod types;
+use types::LyricsPublishData;
+mod error;
+pub use error::ApiError;
+
+pub type Result<T> = std::result::Result<T, ApiError>;
 
 const BASE_URL: &str = "https://lrclib.net";
 const DEFAULT_USER_AGENT: &str = concat!("LRCAPIWrapper/", env!("CARGO_PKG_VERSION"));
@@ -54,6 +56,7 @@ impl LRCLibAPI {
 }
 
 impl LRCLibAPI {
+    /// result: `types::GetLyricsResponse`
     pub fn get_lyrics(
         &self,
         track_name: &str,
@@ -92,6 +95,7 @@ impl LRCLibAPI {
             .map_err(ApiError::from)
     }
 
+    /// result: `types::GetLyricsResponse`
     pub fn get_lyrics_by_id(&self, id: u64) -> Result<Request<()>> {
         let uri = format!("{}/api/get/{}", &self.base_url, id);
         let uri = Url::parse(&uri)?;
@@ -120,6 +124,7 @@ impl LRCLibAPI {
             .map_err(ApiError::from)
     }
 
+    /// result: `Vec<types::LyricsData>`
     pub fn search_lyrics_detailed(
         &self,
         track_name: &str,
@@ -154,6 +159,7 @@ impl LRCLibAPI {
             .map_err(ApiError::from)
     }
 
+    /// result: `types::PublishChallenge`
     pub fn request_publish_challenge(&self) -> Result<Request<()>> {
         let uri = format!("{}/api/request-challenge", &self.base_url);
         let uri = Url::parse(&uri)?;
@@ -167,6 +173,7 @@ impl LRCLibAPI {
             .map_err(ApiError::from)
     }
 
+    /// result: `types::PublishResponse`
     pub fn publish_lyrics(
         &self,
         lyrics: &LyricsPublishData,

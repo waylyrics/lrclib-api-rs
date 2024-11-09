@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use lrclib_api_rs::{LRCLibAPI, LyricsData};
+use lrclib_api_rs::{types::LyricsData, LRCLibAPI};
 
 type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
 
@@ -11,7 +11,6 @@ fn search_keyword() -> Result<()> {
     let url = req.uri().to_string();
 
     let resp = reqwest::blocking::get(url)?.text()?;
-    println!("{resp}");
     let _: Vec<LyricsData> = serde_json::from_str(&resp)?;
 
     Ok(())
@@ -25,7 +24,6 @@ fn search_detailed() -> Result<()> {
     let url = req.uri().to_string();
 
     let resp = reqwest::blocking::get(url)?.text()?;
-    println!("{resp}");
     let _: Vec<LyricsData> = serde_json::from_str(&resp)?;
 
     Ok(())
