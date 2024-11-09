@@ -17,6 +17,20 @@ pub struct LyricsData {
     pub synced_lyrics: Option<String>,
 }
 
+#[derive(Debug, Deserialize, Serialize, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct LyricsPublishData {
+    pub id: u64,
+    pub name: String,
+    pub track_name: String,
+    pub artist_name: String,
+    pub instrumental: bool,
+    pub album_name: String,
+    pub duration: f64,
+    pub plain_lyrics: String,
+    pub synced_lyrics: String,
+}
+
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ErrorResponse {
@@ -50,6 +64,7 @@ pub struct PublishChallenge {
 
 // Custom error type using thiserror crate
 #[derive(Error, Debug, EnumIs)]
+#[non_exhaustive]
 pub enum ApiError {
     #[error("Url parse error: {0}")]
     UrlError(#[from] url::ParseError),
@@ -57,6 +72,4 @@ pub enum ApiError {
     HttpRequestError(#[from] http::Error),
     #[error("JSON serialization error: {0}")]
     JsonSerializationError(#[from] serde_json::Error),
-    #[error("fields are required to be filled to publish")]
-    MissingFieldExists,
 }

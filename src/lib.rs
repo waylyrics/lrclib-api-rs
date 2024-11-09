@@ -154,26 +154,6 @@ impl LRCLibAPI {
             .map_err(ApiError::from)
     }
 
-    #[deprecated(
-        since = "0.2.0",
-        note = "Instead of a manual check, we split search methods"
-    )]
-    pub fn search_lyrics(
-        &self,
-        query: Option<&str>,
-        track_name: Option<&str>,
-        artist_name: Option<&str>,
-        album_name: Option<&str>,
-    ) -> Result<Request<()>> {
-        match (query, track_name) {
-            (None, None) => Err(ApiError::MissingFieldExists),
-            (_, Some(track_name)) => {
-                self.search_lyrics_detailed(track_name, artist_name, album_name)
-            }
-            (Some(query), None) => self.search_lyrics_query(query),
-        }
-    }
-
     pub fn request_publish_challenge(&self) -> Result<Request<()>> {
         let uri = format!("{}/api/request-challenge", &self.base_url);
         let uri = Url::parse(&uri)?;
@@ -189,20 +169,12 @@ impl LRCLibAPI {
 
     pub fn publish_lyrics(
         &self,
-        lyrics: &LyricsData,
+        lyrics: &LyricsPublishData,
         publish_token: &str,
     ) -> Result<Request<String>> {
         let uri = format!("{}/api/publish", &self.base_url);
         let uri = Url::parse(&uri)?;
         let uri = uri.as_str();
-
-        if lyrics.album_name.is_none()
-            || lyrics.duration.is_none()
-            || lyrics.plain_lyrics.is_none()
-            || lyrics.synced_lyrics.is_none()
-        {
-            Err(ApiError::MissingFieldExists)?
-        }
 
         let body = serde_json::to_string(lyrics)?;
 

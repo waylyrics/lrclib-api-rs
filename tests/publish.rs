@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use lrclib_api_rs::{LRCLibAPI, LyricsData, PublishResponse};
+use lrclib_api_rs::{LRCLibAPI, LyricsPublishData, PublishResponse};
 
 type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
 
@@ -8,16 +8,16 @@ type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
 fn publish_lyric() -> Result<()> {
     let api = LRCLibAPI::new();
     let req = api.publish_lyrics(
-        &LyricsData {
+        &LyricsPublishData {
             id: 0,
             name: "你好".into(),
             track_name: "你好压".into(),
             artist_name: "初音未来".into(),
             instrumental: false,
-            plain_lyrics: Some("你好".into()),
-            synced_lyrics: Some("[00:00.00]你好".into()),
-            album_name: Some("专辑".into()),
-            duration: Some(0.0),
+            plain_lyrics: "你好".into(),
+            synced_lyrics: "[00:00.00]你好".into(),
+            album_name: "专辑".into(),
+            duration: 0.0,
         },
         "INVALID_TOKEN",
     )?;
@@ -27,29 +27,6 @@ fn publish_lyric() -> Result<()> {
     let resp = client.execute(reqwest_req)?.text()?;
     let pub_resp: PublishResponse = serde_json::from_str(&resp)?;
     assert!(pub_resp.is_error());
-
-    Ok(())
-}
-
-#[test]
-fn publish_lyric_field_missing() -> Result<()> {
-    let api = LRCLibAPI::new();
-    let req = api.publish_lyrics(
-        &LyricsData {
-            id: 0,
-            name: "你好".into(),
-            track_name: "你好压".into(),
-            artist_name: "初音未来".into(),
-            instrumental: false,
-            plain_lyrics: Some("你好".into()),
-            synced_lyrics: Some("[00:00.00]你好".into()),
-            album_name: Some("专辑".into()),
-            duration: None,
-        },
-        "INVALID_TOKEN",
-    );
-
-    assert!(req.unwrap_err().is_missing_field_exists());
 
     Ok(())
 }
